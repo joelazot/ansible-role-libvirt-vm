@@ -1,0 +1,28 @@
+---
+- name: Create temporary directory for ISO generation.
+  file: 
+    path: /.root/gendir
+    state: directory
+
+- name: copy meta-data and user-data to host
+  block:
+    - template:
+      src: "{{ item }}"
+      dest: /.root/gendir/"{{ item }}"
+    with_items:
+      - user-data.j2
+      - meta-data
+    - copy:
+        src: /.root/gendir/user-data.j2
+        dest: /.root/gendir/user-data
+        remote_src: yes
+    - file:
+        path: /.root/gendir/user-data.j2
+        state: absent
+
+- name: Generate the ISO image command: genisoimage -output "{{ vm.cloudinit_iso_path }}" -volid cidata -rock /.root/user-data /.root/meta-data
+
+- name: remove the temporary directory.
+  file:
+    path: /.root/gendir
+    state: absent

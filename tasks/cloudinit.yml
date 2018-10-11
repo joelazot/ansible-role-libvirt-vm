@@ -1,0 +1,24 @@
+---
+
+- name: Attach cloudinit ISO.
+  command: virsh attach-disk "{{ vm.name }}" "{{ vm.cloudinit_iso }}" vdc --driver file --type cdrom --mode readonly --config
+  become: true
+- name: Check if VM is powered off.
+  virt:
+    name: "{{ vm.name }}"
+    command: status
+  register: vm_state
+  until: vm_state.status = shutdown
+  retries: 20
+  delay: 3
+  become: true
+
+- name: Detach the CloudInit ISO.
+  command: virsh detach-disk "{{ vm.name }}" vdc --config
+  become: true
+
+- name: start the VM.
+  virt:
+    name: "{{ vm.name }}"
+    command: start
+  become: true

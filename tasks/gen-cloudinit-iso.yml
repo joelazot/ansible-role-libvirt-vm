@@ -7,11 +7,11 @@
 - name: copy meta-data and user-data to host
   block:
     - template:
-      src: "{{ item }}"
-      dest: /.root/gendir/"{{ item }}"
-    with_items:
-      - user-data.j2
-      - meta-data
+        src: "{{ item }}"
+        dest: /.root/gendir/{{ item }}
+      with_items:
+        - user-data.j2
+        - meta-data
     - copy:
         src: /.root/gendir/user-data.j2
         dest: /.root/gendir/user-data
@@ -20,7 +20,8 @@
         path: /.root/gendir/user-data.j2
         state: absent
 
-- name: Generate the ISO image command: genisoimage -output "{{ vm.cloudinit_iso_path }}" -volid cidata -rock /.root/user-data /.root/meta-data
+- name: Generate the ISO image.
+  command: '/bin/genisoimage -output "{{ cloudinit_iso_path }}" -volid cidata -rock /.root/gendir/user-data /.root/gendir/meta-data'
 
 - name: remove the temporary directory.
   file:

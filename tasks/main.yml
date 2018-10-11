@@ -1,6 +1,7 @@
 ---
 - include_tasks: gen-cloudinit-iso.yml
-  when: libvirt_gen_cloudinit_iso == 'True'
+  
+
 - include_tasks: autodetect.yml
   # We don't need to know the engine and emulator if we're not creating any new
   # VMs.
@@ -32,8 +33,13 @@
   loop_control:
     loop_var: vm
   when: (vm.state | default('present', true)) == 'present'
+
 - include_tasks: cloudinit.yml
+  with_items: "{{ libvirt_vms }}"
+  loop_control:
+    loop_var: vm
   when: (vm.use_cloudinit == 'True')
+
 - include_tasks: destroy-volumes.yml
   vars:
     volumes: "{{ vm.volumes | default([], true) }}"

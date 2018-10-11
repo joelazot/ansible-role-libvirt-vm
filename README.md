@@ -11,6 +11,9 @@ be preconfigured with libvirt/KVM.
 
 Role Variables
 --------------
+- `libvirt_gen_cloudinit_iso`: Whether to generate a cloudinit iso.
+
+- `libvirt_vm_cloudinit_iso_path`: Path to the iso used for cloudinit. also used to specify the path where you want your cloudinit iso to be stored when it is created.
 
 - `libvirt_vm_default_console_log_dir`: The default directory in which to store
   VM console logs, if a VM-specific log file path is not given. Default is
@@ -91,6 +94,8 @@ Role Variables
 
     - `autostart`: Whether to start the VM when the host starts up. Default is
       `true`.
+
+    - `use_cloudinit`: Whether the VM will use cloudinit. 
 
 
 N.B. the following variables are deprecated: `libvirt_vm_state`,

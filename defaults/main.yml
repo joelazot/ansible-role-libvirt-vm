@@ -1,5 +1,9 @@
 ---
+# Whether to generate a cloudinit ISO or not.
+libvirt_gen_cloudinit_iso: 
 
+# The users public SSH key.
+ssh_key:
 # The default directory in which to store VM console logs, if a VM-specific log
 # file path is not given.
 libvirt_vm_default_console_log_dir: "/var/log/libvirt-consoles/"
@@ -23,6 +27,9 @@ libvirt_vm_engine:
 # Path to emulator binary. If not set, the role will attempt to auto-detect the
 # correct emulator to use.
 libvirt_vm_emulator:
+
+# Path to the cloudinit ISO.
+libvirt_cloudinit_iso_path: 
 
 # A list of specifications of VMs to be created.
 # For backwards compatibility, libvirt_vms defaults to a singleton list using
@@ -49,14 +56,15 @@ libvirt_vms:
 
       # List of volumes.
       volumes: "{{ libvirt_vm_volumes }}"
-
+      
+      # Whether to use cloudinit.
       # List of network interfaces.
       interfaces: "{{ libvirt_vm_interfaces }}"
-
+      
       # Path to console log file.
       console_log_path: "{{ libvirt_vm_console_log_path }}"
 
-
+      use_cloudinit: "{{ libvirt_vm_use_cloudinit }}"
 ### DEPRECATED ###
 # Use the above settings for each item within `libvirt_vms`, instead of the
 # below deprecated variables.
@@ -67,6 +75,7 @@ libvirt_vm_cpu_mode:
 libvirt_vm_volumes:
 libvirt_vm_interfaces:
 libvirt_vm_console_log_path:
+libvirt_vm_use_cloudinit: 
 # Required, so we should fail if not set.
 #libvirt_vm_name:
 #libvirt_vm_memory_mb:

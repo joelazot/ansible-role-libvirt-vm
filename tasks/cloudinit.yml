@@ -3,6 +3,7 @@
 - name: Attach cloudinit ISO.
   command: virsh attach-disk "{{ vm.name }}" "{{ vm.cloudinit_iso }}" vdc --driver file --type cdrom --mode readonly --config
   become: true
+
 - name: Check if VM is powered off.
   virt:
     name: "{{ vm.name }}"

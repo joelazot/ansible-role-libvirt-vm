@@ -1,0 +1,24 @@
+#cloud-config
+write_files:
+  - path: /root/script.sh
+    content: #!/bin/bash
+      while [ ! -f /var/lib/cloud/instance/boot-finished ] ;
+      do
+            sleep 2
+      done
+      /usr/bin/yum remove -y cloud-init
+      /usr/bin/yum update -y
+      /usr/bin/yum upgrade -y
+      /usr/sbin/poweroff
+ssh_authorized_keys:
+  - {{ ssh_key }}
+
+runcmd:
+  - [chmod, +x, '/root/script.sh']
+  - [/bin/bash, 'root/script.sh']
+
+
+growpart:
+  mode: auto
+  devices: ['/']
+  ignore_growroot_disabled: false
